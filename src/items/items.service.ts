@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { ITEMS_LABELS, type ItemLabel, Item } from './dto/types';
 import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
 
 
 
 @Injectable()
 export class ItemsService {
+
 
     private items: Item[] = [
         { id: randomUUID(), name: 'banana', labels: [ITEMS_LABELS.FRUIT] },
@@ -35,4 +37,23 @@ export class ItemsService {
         this.items.push(newItem);
         return newItem;
     }
+
+    update(id: string, updateItemDto: UpdateItemDto) {
+        const itemToUpdate = this.items.find((item) => item.id === id);
+        if (!itemToUpdate) { return }
+        itemToUpdate.name = updateItemDto.name;
+        itemToUpdate.labels = updateItemDto.labels;
+        return itemToUpdate;
+    }
+
+    remove(id: string) {
+        console.log(this.items);
+        const itemIndexToRemove = this.items.findIndex(item => item.id === id);
+        console.log(itemIndexToRemove)
+        if (itemIndexToRemove) {
+            this.items.splice(itemIndexToRemove, 1);
+        }
+
+    }
+
 }

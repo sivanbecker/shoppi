@@ -1,7 +1,8 @@
-import { Controller, Get, Param, ParseUUIDPipe, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Post, Body, Put, Delete } from '@nestjs/common';
 import type { UUID } from 'crypto';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
 
 @Controller('items')
 export class ItemsController {
@@ -24,7 +25,14 @@ export class ItemsController {
         return this.itemsService.create(createItemDto)
     }
     // PUT /items/:id
+    @Put(':id')
+    update(@Body() updateItemDto: UpdateItemDto, @Param('id', ParseUUIDPipe) id: UUID) {
+        this.itemsService.update(id, updateItemDto)
+    }
     // DELETE /items/:id
-
+    @Delete(':id')
+    remove(@Param('id', ParseUUIDPipe) id: UUID) {
+        this.itemsService.remove(id);
+    }
 
 }
