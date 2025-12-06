@@ -9,10 +9,4 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  // GET /items
-  // GET /items/:id
-  // POST /items
-  // PUT /items/:id
-  // DELETE /items/:id
 }
