@@ -27,7 +27,10 @@ export class ItemsController {
     }
     // PUT /items/:id
     @Put(':id')
-    update(@Body() updateItemDto: UpdateItemDto, @Param('id', ParseUUIDPipe) id: UUID) {
+    update(
+        @Body() updateItemDto: UpdateItemDto,
+        @Param('id', ParseUUIDPipe) id: UUID
+    ) {
         this.itemsService.update(id, updateItemDto);
     }
     // DELETE /items/:id
