@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Post, Body, Put, Delete, HttpStatus, HttpCode } from '@nestjs/common';
 import type { UUID } from 'crypto';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -31,6 +31,7 @@ export class ItemsController {
     }
     // DELETE /items/:id
     @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
     remove(@Param('id', ParseUUIDPipe) id: UUID) {
         this.itemsService.remove(id);
     }
