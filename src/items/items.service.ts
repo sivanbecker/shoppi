@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ProfileIdNotFoundError } from './errors';
 import { randomUUID } from 'crypto';
 import { ITEMS_LABELS, type ItemLabel, Item } from './dto/types';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -23,7 +24,7 @@ export class ItemsService {
     getOne(id: string) {
         const matchingItem = this.items.find((item) => item.id === id);
         if (!matchingItem) {
-            throw new NotFoundException(`Profile with ID ${id} not found`);
+            throw new ProfileIdNotFoundError(`Profile with ID ${id} not found`);
         }
         return matchingItem;
     }
@@ -41,7 +42,7 @@ export class ItemsService {
     update(id: string, updateItemDto: UpdateItemDto) {
         const itemToUpdate = this.items.find((item) => item.id === id);
         if (!itemToUpdate) {
-            throw new NotFoundException(`Profile with ID ${id} not found`);
+            throw new ProfileIdNotFoundError(`Profile with ID ${id} not found`);
         }
         itemToUpdate.name = updateItemDto.name;
         itemToUpdate.labels = updateItemDto.labels;
@@ -51,7 +52,7 @@ export class ItemsService {
     remove(id: string) {
         const itemIndexToRemove = this.items.findIndex(item => item.id === id);
         if (itemIndexToRemove === -1) {
-            throw new NotFoundException(`Profile with ID ${id} not found`);
+            throw new ProfileIdNotFoundError(`Profile with ID ${id} not found`);
         }
         this.items.splice(itemIndexToRemove, 1);
 
