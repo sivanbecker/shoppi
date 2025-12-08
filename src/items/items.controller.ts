@@ -3,7 +3,6 @@ import type { UUID } from 'crypto';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-import { ProfileIdNotFoundError } from './errors';
 
 @Controller('items')
 export class ItemsController {
@@ -18,14 +17,7 @@ export class ItemsController {
     // GET /items/:id
     @Get(':id')
     getOne(@Param('id', ParseUUIDPipe) id: UUID) {
-        try {
-            return this.itemsService.getOne(id);
-        } catch (e) {
-            if (e instanceof ProfileIdNotFoundError) {
-                throw new NotFoundException(e.message);
-            }
-            throw e;
-        }
+        return this.itemsService.getOne(id);
 
     }
     // POST /items
@@ -36,28 +28,13 @@ export class ItemsController {
     // PUT /items/:id
     @Put(':id')
     update(@Body() updateItemDto: UpdateItemDto, @Param('id', ParseUUIDPipe) id: UUID) {
-        try {
-            this.itemsService.update(id, updateItemDto);
-
-        } catch (e) {
-            if (e instanceof ProfileIdNotFoundError) {
-                throw new NotFoundException(e.message);
-            }
-            throw e;
-        }
+        this.itemsService.update(id, updateItemDto);
     }
     // DELETE /items/:id
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     remove(@Param('id', ParseUUIDPipe) id: UUID) {
-        try {
-            this.itemsService.remove(id);
-        } catch (e) {
-            if (e instanceof ProfileIdNotFoundError) {
-                throw new NotFoundException(e.message);
-            }
-            throw e;
-        }
+        this.itemsService.remove(id);
     }
 
 }
