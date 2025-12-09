@@ -11,5 +11,5 @@ export type Item = {
     id: string;
     name: string;
     labels: ItemLabel[];
-    createdAt: number;
+    createdAt: string;
 };

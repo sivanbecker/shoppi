@@ -4,21 +4,35 @@ import { randomUUID } from 'crypto';
 import { ITEMS_LABELS, type ItemLabel, Item } from './dto/types';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 
 
 @Injectable()
 export class ItemsService {
+    constructor(private prisma: PrismaService) {
 
+    }
 
     private items: Item[] = [
-        { id: randomUUID(), name: 'banana', labels: [ITEMS_LABELS.FRUIT], createdAt: Date.now() - 200 },
-        { id: randomUUID(), name: 'milk', labels: [ITEMS_LABELS.DAIRY, ITEMS_LABELS.FRIG], createdAt: Date.now() - 100 },
-        { id: randomUUID(), name: 'white-bread', labels: [ITEMS_LABELS.BAKERY], createdAt: Date.now() - 150 },
+        { id: randomUUID(), name: 'banana', labels: [ITEMS_LABELS.FRUIT], createdAt: new Date(Date.now() - 200).toISOString() },
+        { id: randomUUID(), name: 'milk', labels: [ITEMS_LABELS.DAIRY, ITEMS_LABELS.FRIG], createdAt: new Date(Date.now() - 100).toISOString() },
+        { id: randomUUID(), name: 'white-bread', labels: [ITEMS_LABELS.BAKERY], createdAt: new Date(Date.now() - 150).toISOString() },
 
     ]
-    getAll() {
-        return this.items;
+    async getAll(): Promise<Item[]> {
+        try {
+            const items = await this.prisma.item.findMany();
+            return items.map(item => ({
+                id: item.id,
+                name: item.name,
+                labels: item.labels as ItemLabel[],
+                createdAt: item.createdAt.toISOString()
+            }));
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
     }
 
     getOne(id: string) {
@@ -29,15 +43,24 @@ export class ItemsService {
         return matchingItem;
     }
 
-    create(createItemDto: CreateItemDto): Item {
+    async create(createItemDto: CreateItemDto): Promise<Item> {
         const newItem = {
             id: randomUUID(),
             name: createItemDto.name,
-            labels: createItemDto.labels,
-            createdAt: Date.now()
+            labels: createItemDto.labels
         }
-        this.items.push(newItem);
-        return newItem;
+        try {
+            const createdItem = await this.prisma.item.create({ data: newItem });
+            return {
+                id: createdItem.id,
+                name: createdItem.name,
+                labels: createdItem.labels as ItemLabel[],
+                createdAt: createdItem.createdAt.toISOString()
+            };
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
     }
 
     update(id: string, updateItemDto: UpdateItemDto) {
