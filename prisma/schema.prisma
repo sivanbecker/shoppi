@@ -17,6 +17,7 @@ enum ItemLabel {
   DAIRY
   BAKERY
   FRIG
+  VEGETABLE
 }
 
 model Item {

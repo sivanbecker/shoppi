@@ -2,7 +2,8 @@ export const ITEMS_LABELS = Object.freeze({
     FRUIT: "FRUIT",
     DAIRY: "DAIRY",
     BAKERY: "BAKERY",
-    FRIG: "FRIG"
+    FRIG: "FRIG",
+    VEGETABLE: "VEGETABLE"
 });
 
 export type ItemLabel = typeof ITEMS_LABELS[keyof typeof ITEMS_LABELS];

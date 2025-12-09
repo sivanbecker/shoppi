@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "ItemLabel" ADD VALUE 'VEGETABLE';
