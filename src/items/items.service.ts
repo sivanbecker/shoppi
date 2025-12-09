@@ -13,13 +13,6 @@ export class ItemsService {
     constructor(private prisma: PrismaService) {
 
     }
-
-    private items: Item[] = [
-        { id: randomUUID(), name: 'banana', labels: [ITEMS_LABELS.FRUIT], createdAt: new Date(Date.now() - 200).toISOString() },
-        { id: randomUUID(), name: 'milk', labels: [ITEMS_LABELS.DAIRY, ITEMS_LABELS.FRIG], createdAt: new Date(Date.now() - 100).toISOString() },
-        { id: randomUUID(), name: 'white-bread', labels: [ITEMS_LABELS.BAKERY], createdAt: new Date(Date.now() - 150).toISOString() },
-
-    ]
     async getAll(): Promise<Item[]> {
         try {
             const items = await this.prisma.item.findMany();
@@ -35,8 +28,8 @@ export class ItemsService {
         }
     }
 
-    getOne(id: string) {
-        const matchingItem = this.items.find((item) => item.id === id);
+    async getOne(id: string) {
+        const matchingItem = await this.prisma.item.findUnique({ where: { id } });
         if (!matchingItem) {
             throw new ProfileIdNotFoundError(`Profile with ID ${id} not found`);
         }
@@ -63,22 +56,19 @@ export class ItemsService {
         }
     }
 
-    update(id: string, updateItemDto: UpdateItemDto) {
-        const itemToUpdate = this.items.find((item) => item.id === id);
+    async update(id: string, updateItemDto: UpdateItemDto) {
+        const itemToUpdate = await this.prisma.item.findUnique({ where: { id } })
         if (!itemToUpdate) {
             throw new ProfileIdNotFoundError(`Profile with ID ${id} not found`);
         }
         itemToUpdate.name = updateItemDto.name;
         itemToUpdate.labels = updateItemDto.labels;
+        await this.prisma.item.update({ where: { id }, data: itemToUpdate })
         return itemToUpdate;
     }
 
-    remove(id: string) {
-        const itemIndexToRemove = this.items.findIndex(item => item.id === id);
-        if (itemIndexToRemove === -1) {
-            throw new ProfileIdNotFoundError(`Profile with ID ${id} not found`);
-        }
-        this.items.splice(itemIndexToRemove, 1);
+    async remove(id: string) {
+        await this.prisma.item.delete({ where: { id } })
 
     }
 
