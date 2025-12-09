@@ -12,9 +12,9 @@ export class ItemsService {
 
 
     private items: Item[] = [
-        { id: randomUUID(), name: 'banana', labels: [ITEMS_LABELS.FRUIT] },
-        { id: randomUUID(), name: 'milk', labels: [ITEMS_LABELS.DAIRY, ITEMS_LABELS.FRIG] },
-        { id: randomUUID(), name: 'white-bread', labels: [ITEMS_LABELS.BAKERY] },
+        { id: randomUUID(), name: 'banana', labels: [ITEMS_LABELS.FRUIT], createdAt: Date.now() - 200 },
+        { id: randomUUID(), name: 'milk', labels: [ITEMS_LABELS.DAIRY, ITEMS_LABELS.FRIG], createdAt: Date.now() - 100 },
+        { id: randomUUID(), name: 'white-bread', labels: [ITEMS_LABELS.BAKERY], createdAt: Date.now() - 150 },
 
     ]
     getAll() {
@@ -33,7 +33,8 @@ export class ItemsService {
         const newItem = {
             id: randomUUID(),
             name: createItemDto.name,
-            labels: createItemDto.labels
+            labels: createItemDto.labels,
+            createdAt: Date.now()
         }
         this.items.push(newItem);
         return newItem;
