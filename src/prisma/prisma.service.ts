@@ -6,7 +6,6 @@ import { PrismaPg } from '@prisma/adapter-pg';
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
 
-    private
     constructor() {
         const connectionString = `${process.env.DATABASE_URL}`;
         if (!connectionString) {
