@@ -8,3 +8,9 @@ export class PasswordNotFoundError extends Error {
         super(message)
     }
 }
+
+export class EmailAlreadyExistsError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
