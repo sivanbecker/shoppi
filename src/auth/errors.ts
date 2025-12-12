@@ -1,9 +1,9 @@
-export class UserNameNotFoundError extends Error {
+export class EmailNotFoundError extends Error {
     constructor(message: string) {
         super(message)
     }
 }
-export class PasswordNotFoundError extends Error {
+export class PasswordDontMatchError extends Error {
     constructor(message: string) {
         super(message)
     }
