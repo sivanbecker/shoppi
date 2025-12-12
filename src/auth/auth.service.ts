@@ -37,32 +37,27 @@ export class AuthService {
         }
         throw new PasswordNotFoundError('Password does not match.');
     }
-    private async emailIsUnique(email: string): Promise<Boolean> {
+    private async validateEmailIsUnique(email: string): Promise<void> {
         const existing = await this.prisma.user.findUnique({ where: { email } });
         if (existing) {
             throw new EmailAlreadyExistsError(`Email already exists ${email}`)
         }
-        return true;
     }
-    async register(createUserInfoDTO: CreateUserInfoDTO): Promise<UserResponse | undefined> {
+    async register(createUserInfoDTO: CreateUserInfoDTO): Promise<UserResponse> {
         // validate email does not already exist
-        if (await this.emailIsUnique(createUserInfoDTO.email)) {
-            try {
-                // hash password
-                const hash = await argon2.hash(createUserInfoDTO.password);
-                // insert new User to DB
-                const createdUser = await this.prisma.user.create({
-                    data: { email: createUserInfoDTO.email, password: hash }
-                })
-                // return UserResponse 
-                return {
-                    id: createdUser.id,
-                    email: createdUser.email,
-                    createdAt: createdUser.createdAt
-                }
-            } catch (e) {
-                throw new Error(`Failed creating new user ${e.message}`)
-            }
+        await this.validateEmailIsUnique(createUserInfoDTO.email)
+        // hash password
+        const hash = await argon2.hash(createUserInfoDTO.password);
+        // insert new User to DB
+        const createdUser = await this.prisma.user.create({
+            data: { email: createUserInfoDTO.email, password: hash }
+        })
+        // return UserResponse 
+        return {
+            id: createdUser.id,
+            email: createdUser.email,
+            createdAt: createdUser.createdAt
+
         }
     }
 

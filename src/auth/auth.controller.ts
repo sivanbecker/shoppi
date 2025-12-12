@@ -14,9 +14,9 @@ export class AuthController {
 
     // User registration
     @Post('register')
-    register(@Body() createUserInfoDTO: CreateUserInfoDTO) {
+    async register(@Body() createUserInfoDTO: CreateUserInfoDTO) {
         try {
-            const user = this.authService.register(createUserInfoDTO);
+            const user = await this.authService.register(createUserInfoDTO);
             return user; // object with non sensitive info
         } catch (e) {
             if (isInstance(e, EmailAlreadyExistsError)) {
