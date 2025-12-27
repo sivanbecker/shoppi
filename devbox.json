@@ -2,12 +2,13 @@
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
   "packages": [
     "nodejs@24",
-    "yq-go@4.50.1"
+    "yq-go@4.50.1",
+    "task-master-ai@latest"
   ],
   "shell": {
     "init_hook": [
       "echo 'Welcome to devbox!' > /dev/null",
-      "export PS1=' devbox>'"
+      "export PS1='🐱 devbox> '"
     ],
     "scripts": {
       "test": [
